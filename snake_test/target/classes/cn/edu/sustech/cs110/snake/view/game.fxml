@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<?import cn.edu.sustech.cs110.snake.view.components.GameBoard?>
+
+<VBox fx:id="root" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.sustech.cs110.snake.control.GameController">
+    <MenuBar VBox.vgrow="NEVER">
+        <Menu mnemonicParsing="false" text="Game">
+            <MenuItem fx:id="menuPause" mnemonicParsing="false" onAction="#togglePause" text="Play"/>
+            <MenuItem mnemonicParsing="false" onAction="#doRestart" text="Restart"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <RadioMenuItem fx:id="diffEasy" mnemonicParsing="false" onAction="#changeDifficulty" text="Easy">
+                <toggleGroup>
+                    <ToggleGroup fx:id="difficulty"/>
+                </toggleGroup>
+            </RadioMenuItem>
+            <RadioMenuItem fx:id="diffMedium" mnemonicParsing="false" onAction="#changeDifficulty" text="Medium"
+                           toggleGroup="$difficulty"/>
+            <RadioMenuItem fx:id="diffHard" mnemonicParsing="false" onAction="#changeDifficulty" text="Hard"
+                           toggleGroup="$difficulty"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Utilities">
+            <CheckMenuItem fx:id="menuMusic" mnemonicParsing="false" onAction="#toggleMusic" text="Music"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" onAction="#doRecover" text="Recover from..."/>
+            <MenuItem mnemonicParsing="false" onAction="#doSave" text="Save as..."/>
+            <MenuItem mnemonicParsing="false" onAction="#doQuit" text="Quit"/>
+        </Menu>
+    </MenuBar>
+    <SplitPane dividerPositions="0.7" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <GameBoard fx:id="board" prefHeight="Infinity" prefWidth="Infinity"/>
+        <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                <VBox.margin>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                </VBox.margin>
+                <Text fx:id="textPlayerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Player: P1">
+                    <VBox.margin>
+                        <Insets bottom="2.0"/>
+                    </VBox.margin>
+                </Text>
+                <Text fx:id="textPlayerHighest" strokeType="OUTSIDE" strokeWidth="0.0" text="History highest: 0">
+                    <VBox.margin>
+                        <Insets bottom="10.0"/>
+                    </VBox.margin>
+                </Text>
+                <Text fx:id="textCurrentScore" fill="#0e32ff" strokeType="OUTSIDE" strokeWidth="0.0"
+                      text="Current score: 0">
+                    <font>
+                        <Font size="17.0"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="2.0"/>
+                    </VBox.margin>
+                </Text>
+                <Text fx:id="textTimeAlive" strokeType="OUTSIDE" strokeWidth="0.0" text="Time alive: 0s"/>
+            </VBox>
+            <Separator prefWidth="200.0"/>
+            <GridPane>
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <VBox.margin>
+                    <Insets bottom="20.0" top="20.0"/>
+                </VBox.margin>
+                <Button fx:id="btnPause" mnemonicParsing="false" onAction="#togglePause" text="Play"
+                        textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                        GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER"
+                        GridPane.vgrow="ALWAYS"/>
+            </GridPane>
+        </VBox>
+    </SplitPane>
+</VBox>
