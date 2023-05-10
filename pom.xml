@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.edu.sustech.cs110</groupId>
+    <artifactId>snake</artifactId>
+    <version>dev-SNAPSHOT</version>
+
+    <name>Snake</name>
+    <description>Final project for CS110 in SUSTech, 2023 spring semester.</description>
+
+    <properties>
+        <java.version>8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <main-class.name>cn.edu.sustech.cs110.snake.Main</main-class.name>
+
+        <javafx.version>18.0.2</javafx.version>
+        <lombok.version>1.18.24</lombok.version>
+        <guava.version>31.1-jre</guava.version>
+        <jackson-databind.version>2.14.2</jackson-databind.version>
+
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+        <javafx-maven-plugin.version>0.0.8</javafx-maven-plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!--
+          Lombok helps you to generate getters/setters, constructors, etc.
+          Slim your Java code by using the annotations it provided!
+        -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+        <!--
+          Guava is a library developed by Google that provides a set of
+          useful classes that can help you develop the project faster and
+          nicer, make you free of implementing your own class.
+
+          We already introduced 'EventBus' into our framework, you can
+          learn more about it here:
+
+              https://github.com/google/guava/wiki/EventBusExplained
+
+          You are free to use other classes in Guava, check their Wiki
+          to find whatever helpful:
+
+              https://github.com/google/guava/wiki
+        -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
+        <!--
+          JavaScript Object Notation (json) is a commonly used lightweight
+          data-interchange format. It allows you to convert a Java object
+          into human-readable text, and convert a json text back to Java object.
+
+          You may try using it to implement the game save/load function,
+          and the user database.
+
+          Jackson (see below) is a popular library for json converting,
+          hopefully you can make fully use of it after searching some example,
+          or reading its document:
+
+              https://www.baeldung.com/jackson-object-mapper-tutorial
+              https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/index.html
+        -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>${javafx-maven-plugin.version}</version>
+                <configuration>
+                    <mainClass>${main-class.name}</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
