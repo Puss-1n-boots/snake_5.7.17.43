@@ -157,10 +157,7 @@ public class GameController implements Initializable {
         // 显示游戏结束画面
         GameOverScreen gameOverScreen = new GameOverScreen(score, highestScore);
         gameOverScreen.show();
-
-        // 显示游戏结束画面
-        GameOverScreen gameOverScreen = new GameOverScreen(score, highestScore);
-        gameOverScreen.show();
+        
 
         // 弹出对话框，提示用户游戏结束
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
