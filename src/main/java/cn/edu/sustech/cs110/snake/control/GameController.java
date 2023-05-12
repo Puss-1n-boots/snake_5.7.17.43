@@ -3,10 +3,10 @@ package cn.edu.sustech.cs110.snake.control;
 import cn.edu.sustech.cs110.snake.Context;
 import cn.edu.sustech.cs110.snake.enums.Direction;
 import cn.edu.sustech.cs110.snake.events.*;
-import cn.edu.sustech.cs110.snake.view.GameOverScreen;
 import cn.edu.sustech.cs110.snake.view.components.GameBoard;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,17 +17,22 @@ import javafx.scene.input.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class GameController implements Initializable {
 
+    public Button playAgainButton;
+    public Button quitButton;
+    public Text score;
     @FXML
     private Parent root;
 
     @FXML
     private MenuItem menuPause;
+    
 
     @FXML
     private Button btnPause;
@@ -140,9 +145,9 @@ public class GameController implements Initializable {
 
     @Subscribe
     public void GameOver(GameOverEvent event) {
+
         Context.INSTANCE.currentGame().setPlaying(false);
 
-        //新增
         // 更新最高分数和游戏分数
         int score = event.getScore();
         int highestScore = Context.INSTANCE.getHighestScore();
@@ -153,31 +158,36 @@ public class GameController implements Initializable {
             System.out.println("Game over. Your score is: " + score);
         }
 
+        // 打开 GameOver 界面
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/path/to/gameover.fxml"));
+            Parent root = loader.load();
+            //GameController controller = loader.getController();
+            //controller.setScore(score);
+            //controller.setHighestScore(highestScore);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
 
-        // 显示游戏结束画面
-        GameOverScreen gameOverScreen = new GameOverScreen(score, highestScore);
-        gameOverScreen.show();
-        
-
-        // 弹出对话框，提示用户游戏结束
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText("Game Over");
-        alert.setContentText("Your score is: " + score + ". Do you want to play again?");
-        ButtonType playAgainButton = new ButtonType("Play Again");
-        ButtonType quitButton = new ButtonType("Quit");
-        alert.getButtonTypes().setAll(playAgainButton, quitButton);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == playAgainButton) {
             // 用户选择重新开始游戏
-            Context.INSTANCE.currentGame().reset();
-            Context.INSTANCE.currentGame().setPlaying(true);
-        } else {
-            // 用户选择退出游戏
-            Platform.exit();
+            if (controllRestarter.is()) {
+                Context.INSTANCE.currentGame().reset();
+                Context.INSTANCE.currentGame().setPlaying(true);
+            } else {
+                // 用户选择退出游戏
+                Platform.exit();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         // TODO: add some code here
         System.out.println("Game over");
+    }
+
+    public void playAgain() {
+    }
+
+    public void quit() {
     }
 }
