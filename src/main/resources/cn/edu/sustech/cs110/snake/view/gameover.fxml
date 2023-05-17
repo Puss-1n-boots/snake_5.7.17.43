@@ -6,7 +6,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.sustech.cs110.snake.control.GameController">
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/18"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.sustech.cs110.snake.control.GameController">
     <Label style="-fx-font-size: 36px;" text="Game Over!" />
    <Text fx:id="score" strokeType="OUTSIDE" strokeWidth="0.0" text="Your score is: 0" />
     <HBox alignment="CENTER" spacing="10">

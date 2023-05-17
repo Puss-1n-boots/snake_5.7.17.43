@@ -2,7 +2,11 @@ package cn.edu.sustech.cs110.snake.control;
 
 import cn.edu.sustech.cs110.snake.Context;
 import cn.edu.sustech.cs110.snake.enums.Direction;
+import cn.edu.sustech.cs110.snake.enums.GridState;
 import cn.edu.sustech.cs110.snake.events.*;
+import cn.edu.sustech.cs110.snake.model.Game;
+import cn.edu.sustech.cs110.snake.model.Position;
+import cn.edu.sustech.cs110.snake.view.AdvancedStage;
 import cn.edu.sustech.cs110.snake.view.components.GameBoard;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
@@ -22,11 +26,18 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
 
+import static cn.edu.sustech.cs110.snake.view.components.GameBoard.SNAKE_COLOR;
+
 public class GameController implements Initializable {
 
     public Button playAgainButton;
     public Button quitButton;
     public Text score;
+    public long gameStartTime;
+    public Button registerButton;
+    public Button loginButton;
+    public Button set;
+    public Button playButton;
     @FXML
     private Parent root;
 
@@ -80,11 +91,29 @@ public class GameController implements Initializable {
     }
 
     public void togglePause() {
+
+        if(!Context.INSTANCE.currentGame().isPlaying())
+            btnPause.setText("Pause");
+        else
+            btnPause.setText("Play");
+        gameStartTime = System.currentTimeMillis();
+
         // TODO: change the text in menu's pause item and button
         Context.INSTANCE.currentGame().setPlaying(!Context.INSTANCE.currentGame().isPlaying());
     }
 
     public void doRestart() {
+
+        Context.INSTANCE.currentGame().reset();
+        Context.INSTANCE.currentGame().setPlaying(false);
+        Game game = Context.INSTANCE.currentGame();
+        Context.INSTANCE.currentGame().getSnake().getBody().forEach(position -> board.grids[position.getX()][position.getY()].setFill(SNAKE_COLOR));
+        game.generateNewBean();
+        System.out.print("game.generateNewBean()");
+        Map<Position, GridState> diffs = new HashMap<>();
+        diffs.put(game.getBean(), GridState.BEAN_ON);
+        Context.INSTANCE.eventBus().post(new BoardRerenderEvent(diffs));
+
         // TODO: add some code here
     }
 
@@ -135,11 +164,26 @@ public class GameController implements Initializable {
 
     @Subscribe
     public void rerenderChanges(BoardRerenderEvent event) {
+        updateGameTime();
         board.repaint(event.getDiff());
     }
 
     @Subscribe
     public void beanAte(BeanAteEvent event) {
+
+        Game game = Context.INSTANCE.currentGame();
+        //增加分数
+        int score = Context.INSTANCE.getScore();
+        Context.INSTANCE.setScore(score + 10);
+        textCurrentScore.setText("Current score: " + Context.INSTANCE.getScore());
+
+        // 生成新豆子
+        game.generateNewBean();
+        System.out.print("game.generateNewBean()");
+        Map<Position, GridState> diffs = new HashMap<>();
+        diffs.put(game.getBean(), GridState.BEAN_ON);
+        Context.INSTANCE.eventBus().post(new BoardRerenderEvent(diffs));
+
         // TODO: add some code here
     }
 
@@ -149,7 +193,7 @@ public class GameController implements Initializable {
         Context.INSTANCE.currentGame().setPlaying(false);
 
         // 更新最高分数和游戏分数
-        int score = event.getScore();
+        int score = Context.INSTANCE.getScore();
         int highestScore = Context.INSTANCE.getHighestScore();
         if (score > highestScore) {
             Context.INSTANCE.setHighestScore(score);
@@ -158,36 +202,50 @@ public class GameController implements Initializable {
             System.out.println("Game over. Your score is: " + score);
         }
 
-        // 打开 GameOver 界面
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/path/to/gameover.fxml"));
-            Parent root = loader.load();
-            //GameController controller = loader.getController();
-            //controller.setScore(score);
-            //controller.setHighestScore(highestScore);
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
+        // 打开 GameOver 界面（无效）
 
-            // 用户选择重新开始游戏
-            if (controllRestarter.is()) {
-                Context.INSTANCE.currentGame().reset();
-                Context.INSTANCE.currentGame().setPlaying(true);
-            } else {
-                // 用户选择退出游戏
-                Platform.exit();
-            }
+        /*new AdvancedStage("gameover.fxml")
+                .withTitle("SnakeEnd")
+                .shows();*/
+
+        try {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("..\\view/gameover.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            System.out.println(getClass().getResource("..\\view/gameover.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // TODO: add some code here
+        System.out.println(getClass().getResource("..\\view/gameover.fxml"));
         System.out.println("Game over");
     }
 
     public void playAgain() {
+        Context.INSTANCE.currentGame().reset();
+        Context.INSTANCE.currentGame().setPlaying(true);
     }
 
     public void quit() {
+        Platform.exit();
     }
+
+    //更新时间
+    public void updateGameTime() {
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - gameStartTime;
+        long seconds = elapsedTime / 1000;
+        textTimeAlive.setText("Time alive: " + seconds + "s");
+    }
+
+    public void startPlay(){
+        /*Context.INSTANCE.currentGame(new Game(15, 15));
+        new AdvancedStage("game.fxml")
+                .withTitle("Snake")
+                .shows();*/
+    }
+
 }

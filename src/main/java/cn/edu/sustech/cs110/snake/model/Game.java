@@ -75,7 +75,7 @@ public class Game {
         this.playing = true;
     }
 
-    private void generateNewBean() {
+    public void generateNewBean() {
         this.bean = new Position(Context.INSTANCE.random().nextInt(row), Context.INSTANCE.random().nextInt(col));
         if (this.snake.getBody().contains(this.bean)) {
             generateNewBean();

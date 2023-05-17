@@ -24,6 +24,7 @@ public class GameDaemonTask implements Runnable {
         System.out.println(game);
 
         Position headFwd = game.getSnake().getBody().get(0).toward(game.getSnake().getDirection());
+        Position bean = game.getBean();
 
         Map<Position, GridState> diffs = new HashMap<>(3);
 
@@ -52,8 +53,21 @@ public class GameDaemonTask implements Runnable {
         }
 
         // TODO: manage the `diffs` map, you should add the correct changes into it
+
+        //吃豆
+        if (Objects.equals(headFwd, bean)) {
+            game.getSnake().getBody().add(0, headFwd);
+            diffs.put(headFwd, GridState.SNAKE_ON);
+            Context.INSTANCE.eventBus().post(new BeanAteEvent(this,game.getDuration()));
+        }
+
+        //蛇身保持蛇身长度
+        Position tail = game.getSnake().getBody().remove(game.getSnake().getBody().size() - 1);
+        diffs.put(tail, GridState.EMPTY);
+
         game.getSnake().getBody().add(0, headFwd);
         diffs.put(headFwd, GridState.SNAKE_ON);
+
         Context.INSTANCE.eventBus().post(new BoardRerenderEvent(diffs));
     }
 }

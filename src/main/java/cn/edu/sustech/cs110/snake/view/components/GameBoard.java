@@ -11,13 +11,13 @@ import java.util.Map;
 
 public class GameBoard extends GridPane {
 
-    private static final Color SNAKE_COLOR = Color.ORANGE;
+    public static final Color SNAKE_COLOR = Color.ORANGE;
 
-    private static final Color BEAN_COLOR = Color.RED;
+    public static final Color BEAN_COLOR = Color.RED;
 
-    private static final Color BACKGROUND_COLOR = Color.LIGHTYELLOW;
+    public static final Color BACKGROUND_COLOR = Color.LIGHTYELLOW;
 
-    private Rectangle[][] grids;
+    public Rectangle[][] grids;
 
     public void paint(Game game) {
         getChildren().removeAll();
